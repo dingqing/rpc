@@ -1,8 +1,8 @@
 package global
 
 import (
-	"github.com/skyhackvip/service_rpc/codec"
-	"github.com/skyhackvip/service_rpc/protocol"
+	"github.com/dingqing/rpc/codec"
+	"github.com/dingqing/rpc/protocol"
 )
 
 var Codecs = map[protocol.SerializeType]codec.Codec{

@@ -9,9 +9,9 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/skyhackvip/service_rpc/config"
-	"github.com/skyhackvip/service_rpc/global"
-	"github.com/skyhackvip/service_rpc/protocol"
+	"github.com/dingqing/rpc/config"
+	"github.com/dingqing/rpc/global"
+	"github.com/dingqing/rpc/protocol"
 )
 
 type Client interface {

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/skyhackvip/service_rpc/util"
+	"github.com/dingqing/rpc/util"
 )
 
 const (

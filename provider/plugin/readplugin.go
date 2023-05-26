@@ -3,7 +3,7 @@ package plugin
 import (
 	"fmt"
 
-	"github.com/skyhackvip/service_rpc/protocol"
+	"github.com/dingqing/rpc/protocol"
 )
 
 type BeforeReadPlugin struct{}

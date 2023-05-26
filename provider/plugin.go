@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/skyhackvip/service_rpc/protocol"
+	"github.com/dingqing/rpc/protocol"
 )
 
 type PluginContainer interface {

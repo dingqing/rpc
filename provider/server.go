@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/skyhackvip/service_rpc/naming"
+	"github.com/dingqing/rpc/proxy"
 )
 
 var maxRegisterRetry int = 2
@@ -38,13 +38,13 @@ var DefaultOption = Option{
 
 type RPCServer struct {
 	listener   Listener //*Listener is error
-	registry   naming.Registry
+	registry   proxy.Registry
 	cancelFunc context.CancelFunc
 	option     Option
 	Plugins    PluginContainer
 }
 
-func NewRPCServer(option Option, registry naming.Registry) *RPCServer {
+func NewRPCServer(option Option, registry proxy.Registry) *RPCServer {
 	if option.NetProtocol == "" {
 		option.NetProtocol = DefaultOption.NetProtocol
 	}
@@ -85,7 +85,7 @@ func (svr *RPCServer) Run() {
 	}
 
 	//register in discovery,注册失败（重试2次）退出服务
-	err = svr.registerToNaming()
+	err = svr.registerToproxy()
 	if err != nil {
 		svr.Close()
 		panic(err)
@@ -118,8 +118,8 @@ func (svr *RPCServer) Shutdown() {
 	}
 }
 
-func (svr *RPCServer) registerToNaming() error {
-	instance := &naming.Instance{
+func (svr *RPCServer) registerToproxy() error {
+	instance := &proxy.Instance{
 		Env:      svr.option.Env,
 		AppId:    svr.option.AppId,
 		Hostname: svr.option.Hostname,
@@ -130,10 +130,10 @@ func (svr *RPCServer) registerToNaming() error {
 		retries--
 		cancel, err := svr.registry.Register(context.Background(), instance)
 		if err == nil {
-			log.Println("register to naming server success: ", svr.option.AppId, svr.option.Hostname)
+			log.Println("register to proxy server success: ", svr.option.AppId, svr.option.Hostname)
 			svr.cancelFunc = cancel
 			return nil
 		}
 	}
-	return errors.New("register to naming server fail")
+	return errors.New("register to proxy server fail")
 }

@@ -9,9 +9,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/skyhackvip/service_rpc/config"
-	"github.com/skyhackvip/service_rpc/global"
-	"github.com/skyhackvip/service_rpc/protocol"
+	"github.com/dingqing/rpc/config"
+	"github.com/dingqing/rpc/global"
+	"github.com/dingqing/rpc/protocol"
 )
 
 var ServerClosedErr = errors.New("server closed error!")

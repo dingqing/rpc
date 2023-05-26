@@ -5,10 +5,10 @@ import (
 	"errors"
 	"flag"
 
-	"github.com/skyhackvip/service_rpc/naming"
-	"github.com/skyhackvip/service_rpc/provider"
+	"github.com/dingqing/rpc/provider"
+	"github.com/dingqing/rpc/proxy"
 
-	//"github.com/skyhackvip/service_rpc/provider/plugin"
+	//"github.com/dingqing/rpc/provider/plugin"
 	"context"
 	"io/ioutil"
 	"log"
@@ -28,8 +28,8 @@ func main() {
 		log.Fatal("load config fail!", err)
 	}
 
-	conf := &naming.Config{Nodes: config.RegistryAddrs, Env: config.Env}
-	discovery := naming.New(conf)
+	conf := &proxy.Config{Nodes: config.RegistryAddrs, Env: config.Env}
+	discovery := proxy.New(conf)
 
 	option := provider.Option{
 		Ip:       config.Ip,

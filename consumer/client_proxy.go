@@ -7,8 +7,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/skyhackvip/service_rpc/global"
-	"github.com/skyhackvip/service_rpc/naming"
+	"github.com/dingqing/rpc/global"
+	"github.com/dingqing/rpc/proxy"
 )
 
 type ClientProxy interface {
@@ -18,7 +18,7 @@ type ClientProxy interface {
 type RPCClientProxy struct {
 	failMode FailMode
 	option   Option
-	registry naming.Registry
+	registry proxy.Registry
 	client   Client
 
 	mutex       sync.RWMutex
@@ -26,7 +26,7 @@ type RPCClientProxy struct {
 	loadBalance LoadBalance
 }
 
-func NewClientProxy(appId string, option Option, registry naming.Registry) ClientProxy {
+func NewClientProxy(appId string, option Option, registry proxy.Registry) ClientProxy {
 	cp := &RPCClientProxy{
 		option:   option,
 		failMode: option.FailMode,
