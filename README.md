@@ -27,16 +27,15 @@
 ![RPC框架设计类图](https://github.com/dingqing/rpc/blob/main/RPC.jpg?raw=true)
 
 ## 运行
+- 启动 [服务注册中心](https://github.com/dingqing/registry)
 - 启动服务端
-  
-  先启动 [服务注册中心](https://github.com/dingqing/registry)
-```
- cd demo
- go run server.go -c config.yaml
-```
-- 客户端测试
-```
-cd demo
-go run client_proxy.go
 
-```
+  ```
+  cd demo
+  go run server.go -c config.yaml
+  ```
+- 客户端测试
+
+  ```
+  go run client_proxy.go
+  ```
