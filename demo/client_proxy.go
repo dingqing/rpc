@@ -19,7 +19,7 @@ func main() {
 	cli := consumer.NewClientProxy("UserService", consumer.DefaultOption, discovery)
 
 	var GetUserById func(id int) (User, error)
-	res, err := cli.Call(context.Backgroud(), "User.GetUserById", &GetUserById, 1)
+	res, err := cli.Call(context.Background(), "User.GetUserById", &GetUserById, 1)
 	if err != nil {
 		log.Println("call error:", err)
 	} else {

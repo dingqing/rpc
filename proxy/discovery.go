@@ -116,9 +116,8 @@ func (dis *Discovery) Register(ctx context.Context, instance *Instance) (context
 }
 
 func (dis *Discovery) do(action string, url string, params map[string]interface{}, instance *Instance) error {
-	uri := fmt.Sprintf(_registerURL, dis.pickNode())
+	uri := fmt.Sprintf(url, dis.pickNode())
 	log.Panicln("discovery - request " + action + " url:" + uri)
-
 	resp, err := HttpPost(uri, params)
 	if err != nil {
 		dis.switchNode()
@@ -131,13 +130,15 @@ func (dis *Discovery) do(action string, url string, params map[string]interface{
 		log.Println(err)
 		return err
 	}
-	if err != 200 {
+	if res.Code != 200 {
 		log.Printf(action+" err, url is (%v), response code (%v)\n", uri, res.Code)
 		return err
 	}
 	return nil
 }
 func (dis *Discovery) register(instance *Instance) error {
+	uri := fmt.Sprintf(_registerURL, dis.pickNode())
+	log.Println("discovery - request register url:" + uri)
 	params := make(map[string]interface{})
 	params["env"] = dis.conf.Env
 	params["appid"] = instance.AppId
@@ -145,21 +146,78 @@ func (dis *Discovery) register(instance *Instance) error {
 	params["addrs"] = instance.Addrs
 	params["version"] = instance.Version
 	params["status"] = 1
-	return dis.do("register", _registerURL, params, instance)
+	resp, err := HttpPost(uri, params) //ctx
+	if err != nil {
+		dis.switchNode()
+		log.Println("register err: ", err, "url: ", uri)
+		return err
+	}
+	res := Response{}
+	err = json.Unmarshal([]byte(resp), &res)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if res.Code != 200 {
+		log.Printf("register err, url is (%v), response code (%v)\n", uri, res.Code)
+		return errors.New("conflict")
+	}
+	return nil
 }
+
 func (dis *Discovery) renew(instance *Instance) error {
+	uri := fmt.Sprintf(_renewURL, dis.pickNode())
+	log.Println("discovery - request renew url:" + uri)
 	params := make(map[string]interface{})
 	params["env"] = dis.conf.Env
 	params["appid"] = instance.AppId
 	params["hostname"] = instance.Hostname
-	return dis.do("renew", _renewURL, params, instance)
+
+	resp, err := HttpPost(uri, params)
+	if err != nil {
+		dis.switchNode()
+		log.Println("renew err: ", err, "url: ", uri)
+		return err
+	}
+	res := Response{}
+	err = json.Unmarshal([]byte(resp), &res)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if res.Code != 200 {
+		log.Printf("uri is (%v), response code (%v)\n", uri, res.Code)
+		return errors.New("not found")
+	}
+	return nil
 }
+
 func (dis *Discovery) cancel(instance *Instance) error {
+	//local cache
+	uri := fmt.Sprintf(_cancelURL, dis.pickNode())
+	log.Println("discovery - request cancel url:" + uri)
 	params := make(map[string]interface{})
 	params["env"] = dis.conf.Env
 	params["appid"] = instance.AppId
 	params["hostname"] = instance.Hostname
-	return dis.do("cancel", _cancelURL, params, instance)
+
+	resp, err := HttpPost(uri, params)
+	if err != nil {
+		dis.switchNode()
+		log.Println("cancel err: ", err, "url: ", uri)
+		return err
+	}
+	res := Response{}
+	err = json.Unmarshal([]byte(resp), &res)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if res.Code != 200 {
+		log.Printf("uri is (%v), response code (%v)\n", uri, res.Code)
+		return err
+	}
+	return nil
 }
 
 func (dis *Discovery) updateNode() {
