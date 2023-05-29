@@ -32,7 +32,7 @@
 
 ## 实现
 ### 类图
-![RPC框架设计类图](https://gitee.com/2dingqing/images/raw/master/2731685111859_.pic.jpg)
+![RPC框架设计类图](https://i.imgtg.com/2023/05/27/OoNSag.jpg)
 
 ## 运行
 - 启动 [服务注册中心](https://github.com/dingqing/registry)
